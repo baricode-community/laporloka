@@ -118,6 +118,16 @@
                 </a>
             </div>
             @endguest
+
+            <!-- Report Creation Section -->
+            <div id="create-report-section" class="mb-16">
+                <livewire:create-report />
+            </div>
+
+            <!-- Recent Reports Section -->
+            <div class="mb-16">
+                <livewire:recent-reports :limit="6" :show-pagination="false" />
+            </div>
         </div>
     </div>
 @endsection

@@ -15,10 +15,12 @@
 
     @vite(['resources/css/app.css', 'resources/js/app.js'])
     @fluxAppearance
+    @livewireStyles
 </head>
 <body class="bg-gray-50 text-gray-900">
     @include('layouts._components.navbar')
     @yield('content')
     @include('layouts._components.footer')
+    @livewireScripts
 </body>
 </html>
