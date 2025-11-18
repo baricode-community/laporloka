@@ -1,12 +1,25 @@
 services:
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: laporloka-app
+    working_dir: /var/www/html
+    volumes:
+      - ./:/var/www/html
+    ports:
+      - "8000:8000"
+    depends_on:
+      - db
+
   db:
-    image: mysql
+    image: mysql:8.0
+    container_name: laporloka-db
     environment:
       MYSQL_DATABASE: 'db'
       MYSQL_USER: 'user'
       MYSQL_PASSWORD: 'password'
       MYSQL_ROOT_PASSWORD: 'password'
+    command: --require_secure_transport=OFF
     ports:
-      - '3306:3306'
-    expose:
-      - '3306'
+      - "3307:3306"
