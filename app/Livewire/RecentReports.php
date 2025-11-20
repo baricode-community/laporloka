@@ -5,6 +5,7 @@ namespace App\Livewire;
 use App\Models\Report;
 use Livewire\Component;
 use Livewire\WithPagination;
+use Livewire\Attributes\On;
 
 class RecentReports extends Component
 {
@@ -12,11 +13,37 @@ class RecentReports extends Component
 
     public $limit = 6;
     public $showPagination = false;
+    public $newReportId = null;
 
     public function mount($limit = 6, $showPagination = false)
     {
         $this->limit = $limit;
         $this->showPagination = $showPagination;
+    }
+
+    #[On('reportCreated')]
+    public function refreshReports($reportId = null)
+    {
+        // Store the new report ID for highlighting
+        if ($reportId) {
+            $this->newReportId = $reportId;
+        }
+        
+        // Force refresh the reports list
+        $this->resetPage();
+        
+        // Dispatch event for visual notification
+        if ($reportId) {
+            $this->dispatch('reportAdded', ['message' => 'Laporan baru telah ditambahkan!']);
+            
+            // Clear the highlight after 10 seconds
+            $this->js('setTimeout(() => { $wire.clearNewReportHighlight(); }, 10000);');
+        }
+    }
+
+    public function clearNewReportHighlight()
+    {
+        $this->newReportId = null;
     }
 
     public function render()

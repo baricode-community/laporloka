@@ -75,6 +75,9 @@ class CreateReport extends Component
             $this->success = true;
             $this->resetForm();
 
+            // Broadcast event to refresh recent reports
+            $this->dispatch('reportCreated', $report->id);
+            
             session()->flash('success', "Laporan berhasil dibuat dengan nomor: {$this->reportNumber}");
         } catch (\Exception $e) {
             session()->flash('error', 'Terjadi kesalahan saat menyimpan laporan. Silakan coba lagi.');

@@ -2,6 +2,18 @@
     <div class="mb-8">
         <h2 class="text-3xl font-bold text-gray-900 mb-2">Laporan Terbaru</h2>
         <p class="text-gray-600">Lihat laporan-laporan terbaru dari masyarakat</p>
+        
+        <!-- Success notification for new reports -->
+        <div id="new-report-notification" class="hidden mt-4 p-4 bg-green-100 border border-green-300 text-green-700 rounded-lg animate-pulse">
+            <div class="flex">
+                <svg class="w-5 h-5 text-green-400 mr-3 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                </svg>
+                <div>
+                    <strong>Laporan Baru!</strong> Laporan terbaru telah ditampilkan di daftar ini.
+                </div>
+            </div>
+        </div>
     </div>
 
     @if ($reports->count() > 0)
@@ -9,10 +21,15 @@
             @if (is_countable($reports))
                 @foreach ($reports as $report)
                     <div
-                        class="bg-white border border-gray-200 rounded-2xl p-6 hover:shadow-lg transition-shadow duration-300">
+                        class="bg-white border border-gray-200 rounded-2xl p-6 hover:shadow-lg transition-all duration-300 {{ $newReportId == $report->id ? 'ring-2 ring-blue-500 ring-opacity-75 bg-blue-50 animate-pulse' : '' }}">
                         <!-- Header dengan Status dan Prioritas -->
                         <div class="flex justify-between items-start mb-4">
                             <div class="flex items-center space-x-2">
+                                @if($newReportId == $report->id)
+                                    <span class="px-2 py-1 rounded-full text-xs font-semibold bg-blue-100 text-blue-800">
+                                        ✨ BARU
+                                    </span>
+                                @endif
                                 <span
                                     class="px-3 py-1 rounded-full text-xs font-semibold {{ $this->getStatusBadgeColor($report->status) }}">
                                     {{ $this->getStatusText($report->status) }}
@@ -154,4 +171,27 @@
             overflow: hidden;
         }
     </style>
+
+    <script>
+    document.addEventListener('livewire:init', () => {
+        Livewire.on('reportAdded', (data) => {
+            const notification = document.getElementById('new-report-notification');
+            if (notification) {
+                // Show notification
+                notification.classList.remove('hidden');
+                
+                // Scroll to recent reports section smoothly
+                notification.scrollIntoView({ 
+                    behavior: 'smooth', 
+                    block: 'nearest' 
+                });
+                
+                // Hide notification after 5 seconds
+                setTimeout(() => {
+                    notification.classList.add('hidden');
+                }, 5000);
+            }
+        });
+    });
+    </script>
 </div>
