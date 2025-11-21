@@ -112,16 +112,14 @@
                      onclick="window.location.href='/laporan/{{ $report->id }}'">
                     <!-- Header dengan Status dan Prioritas -->
                     <div class="flex justify-between items-start mb-4">
-                        <div class="flex items-center space-x-2">
-                            <span
-                                class="px-3 py-1 rounded-full text-xs font-semibold bg-yellow-100 text-yellow-800">
-                                Menunggu
-                            </span>
-                            <span
-                                class="px-2 py-1 rounded-full text-xs font-medium bg-blue-100 text-blue-800">
-                                Sedang
-                            </span>
-                        </div>
+                       <div class="flex items-center space-x-2">
+                           <span class="px-3 py-1 rounded-full text-xs font-semibold {{ $report->getStatusBadgeColor($report->status) }}">
+                               {{ $report->getStatusText($report->status) }}
+                           </span>
+                           <span class="px-2 py-1 rounded-full text-xs font-medium {{ $report->getPriorityBadgeColor($report->priority) }}">
+                               {{ $report->getPriorityText($report->priority) }}
+                           </span>
+                       </div>
                         <div class="text-xs text-gray-500">
                             {{ $report->created_at->diffForHumans() }}
                         </div>

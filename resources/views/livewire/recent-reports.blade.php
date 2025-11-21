@@ -117,18 +117,6 @@
             </div>
         @endif
 
-        @if (!$showPagination && (is_countable($reports) ? count($reports) : $reports->count()) >= $limit)
-            <div class="text-center mt-8">
-                <a href="#"
-                    class="inline-flex items-center bg-gray-100 text-gray-700 px-6 py-3 rounded-xl hover:bg-gray-200 transition-colors duration-200 font-semibold">
-                    Lihat Semua Laporan (Segera Hadir)
-                    <svg class="w-5 h-5 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                            d="M13 7l5 5m0 0l-5 5m5-5H6"></path>
-                    </svg>
-                </a>
-            </div>
-        @endif
     @else
         <div class="text-center py-12 bg-gray-50 rounded-xl">
             <svg class="w-16 h-16 text-gray-400 mx-auto mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
