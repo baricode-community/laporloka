@@ -1,0 +1,2 @@
+- Menggunakan database mysql
+- Ketika ingin mengubah maka buat branch baru, misal feat/fitur-baru
