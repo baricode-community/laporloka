@@ -5,7 +5,7 @@
         <div class="container mx-auto px-4 py-12">
             <!-- Hero Section -->
             <div class="text-center mb-16">
-                <h1 class="text-5xl font-bold text-gray-900 mb-6 bg-gradient-to-r from-blue-600 to-green-600 bg-clip-text text-transparent">
+                <h1 class="text-5xl font-bold mb-6 bg-gradient-to-r from-blue-600 to-green-600 bg-clip-text text-transparent">
                     Selamat Datang di LaporLoka
                 </h1>
                 <p class="text-xl text-gray-700 max-w-3xl mx-auto leading-relaxed">
@@ -127,6 +127,20 @@
             <!-- Recent Reports Section -->
             <div class="mb-16">
                 <livewire:recent-reports :limit="6" :show-pagination="false" />
+            </div>
+
+            <!-- View All Reports Button -->
+            <div class="text-center mb-16">
+                <a href="{{ route('reports.index') }}"
+                   class="inline-flex items-center bg-blue-600 text-white px-8 py-4 rounded-xl hover:bg-blue-700 transition-colors duration-200 font-bold text-lg shadow-lg hover:shadow-xl transform hover:scale-105">
+                    <svg class="w-6 h-6 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v10a2 2 0 002 2h8a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2v4a2 2 0 01-2 2H9a2 2 0 01-2-2V5z"></path>
+                    </svg>
+                    Lihat Semua Laporan
+                    <svg class="w-5 h-5 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7l5 5m0 0l-5 5m5-5H6"></path>
+                    </svg>
+                </a>
             </div>
         </div>
     </div>

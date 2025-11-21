@@ -22,9 +22,32 @@ class UserFactory extends Factory
      */
     public function definition(): array
     {
+        // Indonesian names
+        $firstNames = [
+            'Ahmad', 'Budi', 'Chandra', 'Dedi', 'Eko', 'Fajar', 'Gunawan', 'Hendra', 'Iwan', 'Joko',
+            'Kusumo', 'Lukman', 'Muhammad', 'Nur', 'Omar', 'Prabowo', 'Rudi', 'Sukma', 'Toni', 'Umar',
+            'Viktor', 'Wahyu', 'Yudi', 'Zainal', 'Agus', 'Bambang', 'Cahyo', 'Doni', 'Eko', 'Fikri',
+            'Gilang', 'Hadi', 'Indra', 'Jaka', 'Kurniawan', 'Lutfi', 'Mochammad', 'Nanda', 'Oman', 'Putra',
+            'Qori', 'Rizki', 'Satria', 'Teguh', 'Ujang', 'Vino', 'Wahyu', 'Yoga', 'Zulkifli', 'Andi',
+            'Siti', 'Dewi', 'Ratna', 'Sri', 'Nur', 'Fitri', 'Indah', 'Maya', 'Rini', 'Wati',
+            'Susanti', 'Permata', 'Sari', 'Ayu', 'Lestari', 'Puspita', 'Mawar', 'Melati', 'Sakura', 'Anggrek'
+        ];
+        
+        $lastNames = [
+            'Santoso', 'Wijaya', 'Hidayat', 'Pratama', 'Saputra', 'Gunawan', 'Sutrisno', 'Hidayat', 'Kusumo', 'Siregar',
+            'Pangestu', 'Nugroho', 'Firmansyah', 'Rahman', 'Hakim', 'Sudirman', 'Kurniawan', 'Suharto', 'Wibowo', 'Prasetyo',
+            'Setiawan', 'Utomo', 'Suryono', 'Rahardjo', 'Wibisono', 'Santoso', 'Suyanto', 'Purnomo', 'Mulyono', 'Suharsono',
+            'Wijanarko', 'Prabowo', 'Sulistyo', 'Waskito', 'Handoko', 'Riyadi', 'Wibawa', 'Saptono', 'Widodo', 'Sutanto',
+            'Permadi', 'Wijayanto', 'Suyono', 'Wibisono', 'Sutopo', 'Wijaya', 'Suharyono', 'Wibowo', 'Sutrisno', 'Widodo'
+        ];
+        
+        $firstName = $this->faker->randomElement($firstNames);
+        $lastName = $this->faker->randomElement($lastNames);
+        $fullName = $firstName . ' ' . $lastName;
+        
         return [
-            'name' => fake()->name(),
-            'email' => fake()->unique()->safeEmail(),
+            'name' => $fullName,
+            'email' => strtolower(str_replace(' ', '.', $fullName)) . '@example.com',
             'email_verified_at' => now(),
             'password' => static::$password ??= 'password',
             'remember_token' => Str::random(10),

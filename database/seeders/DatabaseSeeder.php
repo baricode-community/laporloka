@@ -25,7 +25,7 @@ class DatabaseSeeder extends Seeder
         // Create test user (check if exists first)
         if (!User::where('email', 'test@example.com')->exists()) {
             User::factory()->create([
-                'name' => 'Test User',
+                'name' => 'Pengguna Uji Coba',
                 'email' => 'test@example.com',
             ]);
         }
@@ -33,7 +33,7 @@ class DatabaseSeeder extends Seeder
         // Create admin user (check if exists first)
         if (!User::where('email', 'admin@example.com')->exists()) {
             User::factory()->create([
-                'name' => 'Admin User',
+                'name' => 'Administrator',
                 'email' => 'admin@example.com',
             ]);
         }

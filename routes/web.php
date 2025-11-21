@@ -9,6 +9,9 @@ use App\Http\Controllers\HomeController;
 Route::get('/', [HomeController::class, 'index'])->name('home');
 Route::get('/about', [HomeController::class, 'about'])->name('about');
 
+// Reports routes
+Route::get('/laporan', [\App\Http\Controllers\ReportsController::class, 'index'])->name('reports.index');
+
 Route::view('dashboard', 'dashboard')
     ->middleware(['auth', 'verified'])
     ->name('dashboard');

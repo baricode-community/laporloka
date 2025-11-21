@@ -34,16 +34,53 @@ class ReportAttachmentFactory extends Factory
 
         $mimeType = $this->faker->randomElement($mimeTypes);
         $filename = $this->faker->uuid() . '.' . $this->getExtensionFromMimeType($mimeType);
+        
+        // Indonesian file names
+        $fileNames = [
+            'foto_jalan_rusak',
+            'dokumentasi_lampu_mati',
+            'buki_sampah_menumpuk',
+            'video_selokan_mampet',
+            'gambar_taman_rusak',
+            'laporan_fasilitas_umum',
+            'foto_gangguan_keamanan',
+            'dokumen_marka_jalan',
+            'gambar_kondisi_puskesmas',
+            'video_sekolah_rusak',
+            'foto_jalur_pejalan_kaki',
+            'dokumen_lampu_lalu_lintas',
+            'gambar_kebisingan_pabrik',
+            'video_pohon_tumbang',
+            'foto_air_pdam_mati',
+            'dokumen_jalur_sepeda',
+            'gambar_parkir_liar',
+            'video_gorong_gorong',
+            'foto_fasilitas_disabilitas',
+            'dokumen_pos_kamling'
+        ];
+        
+        $descriptions = [
+            'Dokumentasi foto kondisi saat ini di lokasi kejadian.',
+            'Bukti video yang menunjukkan masalah secara jelas.',
+            'File pendukung untuk memperkuat laporan yang dibuat.',
+            'Dokumen resmi dari instansi terkait mengenai masalah ini.',
+            'Foto tambahan dari sudut pandang yang berbeda.',
+            'Video rekaman kronologis kejadian yang terjadi.',
+            'Dokumen keterangan saksi mata di lokasi.',
+            'Foto close-up detail kerusakan yang terjadi.',
+            'Video situasi umum di sekitar lokasi laporan.',
+            'Dokumen surat pengaduan resmi ke pihak berwenang.'
+        ];
 
         return [
             'report_id' => Report::factory(),
             'user_id' => User::factory(),
             'filename' => $filename,
-            'original_name' => $this->faker->words(3, true) . '.' . $this->getExtensionFromMimeType($mimeType),
+            'original_name' => $this->faker->randomElement($fileNames) . '_' . $this->faker->numberBetween(1, 99) . '.' . $this->getExtensionFromMimeType($mimeType),
             'mime_type' => $mimeType,
             'file_size' => $this->faker->numberBetween(1024, 10485760), // 1KB to 10MB
             'file_path' => 'reports/' . $filename,
-            'description' => $this->faker->optional(0.6)->sentence(6),
+            'description' => $this->faker->optional(0.6)->randomElement($descriptions),
             'is_public' => $this->faker->boolean(85), // 85% chance of being public
         ];
     }
@@ -71,10 +108,18 @@ class ReportAttachmentFactory extends Factory
      */
     public function image(): static
     {
+        $imageNames = [
+            'foto_bukti_kejadian',
+            'gambar_kondisi_lokasi',
+            'dokumentasi_visual',
+            'foto_detail_kerusakan',
+            'gambar_situasi_terkini'
+        ];
+        
         return $this->state(fn (array $attributes) => [
             'mime_type' => $this->faker->randomElement(['image/jpeg', 'image/png', 'image/gif']),
             'filename' => $this->faker->uuid() . '.' . $this->faker->randomElement(['jpg', 'png', 'gif']),
-            'original_name' => $this->faker->words(3, true) . '.' . $this->faker->randomElement(['jpg', 'png', 'gif']),
+            'original_name' => $this->faker->randomElement($imageNames) . '_' . $this->faker->numberBetween(1, 99) . '.' . $this->faker->randomElement(['jpg', 'png', 'gif']),
         ]);
     }
 
@@ -97,10 +142,18 @@ class ReportAttachmentFactory extends Factory
      */
     public function video(): static
     {
+        $videoNames = [
+            'video_rekaman_kejadian',
+            'dokumentasi_video',
+            'rekaman_situasi_lokasi',
+            'video_kronologis',
+            'buki_video_laporan'
+        ];
+        
         return $this->state(fn (array $attributes) => [
             'mime_type' => $this->faker->randomElement(['video/mp4', 'video/avi']),
             'filename' => $this->faker->uuid() . '.' . $this->faker->randomElement(['mp4', 'avi']),
-            'original_name' => $this->faker->words(3, true) . '.' . $this->faker->randomElement(['mp4', 'avi']),
+            'original_name' => $this->faker->randomElement($videoNames) . '_' . $this->faker->numberBetween(1, 99) . '.' . $this->faker->randomElement(['mp4', 'avi']),
             'file_size' => $this->faker->numberBetween(1048576, 52428800), // 1MB to 50MB
         ]);
     }
