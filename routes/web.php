@@ -11,8 +11,11 @@ Route::get('/about', [HomeController::class, 'about'])->name('about');
 
 // Reports routes
 Route::get('/laporan', [\App\Http\Controllers\ReportsController::class, 'index'])->name('reports.index');
+Route::get('/laporan/{id}', [\App\Http\Controllers\ReportsController::class, 'show'])->name('reports.show');
 
-Route::view('dashboard', 'dashboard')
+Route::get('/dashboard', function() {
+        return redirect('/');
+    })
     ->middleware(['auth', 'verified'])
     ->name('dashboard');
 

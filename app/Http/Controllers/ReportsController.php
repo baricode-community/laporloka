@@ -48,6 +48,22 @@ class ReportsController extends Controller
         ]);
     }
 
+    public function show($id)
+    {
+        $report = Report::with(['category', 'user', 'comments', 'attachments'])
+            ->where('id', $id)
+            ->where('is_public', true)
+            ->firstOrFail();
+
+        return view('reports.show', [
+            'report' => $report,
+            'statusBadgeColor' => $this->getStatusBadgeColor($report->status),
+            'statusText' => $this->getStatusText($report->status),
+            'priorityBadgeColor' => $this->getPriorityBadgeColor($report->priority),
+            'priorityText' => $this->getPriorityText($report->priority),
+        ]);
+    }
+
     public function getStatusBadgeColor($status)
     {
         return match($status) {

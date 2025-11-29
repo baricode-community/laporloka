@@ -31,19 +31,36 @@
     @endif
 
     @guest
-        <div class="text-center py-12 bg-gray-50 rounded-xl">
-            <svg class="w-16 h-16 text-gray-400 mx-auto mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"></path>
-            </svg>
-            <h3 class="text-xl font-semibold text-gray-900 mb-2">Masuk Diperlukan</h3>
-            <p class="text-gray-600 mb-6">Anda harus masuk terlebih dahulu untuk membuat laporan</p>
-            <div class="space-x-4">
-                <a href="{{ route('login') }}" class="inline-flex items-center bg-blue-600 text-white px-6 py-3 rounded-xl hover:bg-blue-700 transition-colors duration-200 font-semibold">
-                    Masuk
+        <div class="text-center py-12 bg-gradient-to-r from-blue-50 to-indigo-50 rounded-xl border-2 border-blue-200">
+            <div class="bg-blue-100 w-20 h-20 rounded-full flex items-center justify-center mx-auto mb-6">
+                <svg class="w-10 h-10 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"></path>
+                </svg>
+            </div>
+            <h3 class="text-2xl font-bold text-gray-900 mb-3">Login Diperlukan untuk Membuat Laporan</h3>
+            <p class="text-gray-700 mb-8 max-w-md mx-auto">
+                Untuk membuat laporan masalah, Anda perlu masuk terlebih dahulu. Ini membantu kami melacak pengaduan Anda dan memberikan update status.
+            </p>
+            <div class="flex flex-col sm:flex-row gap-4 justify-center">
+                <a href="{{ route('login') }}" class="inline-flex items-center justify-center bg-blue-600 text-white px-8 py-4 rounded-xl hover:bg-blue-700 transition-all duration-200 font-semibold shadow-lg hover:shadow-xl">
+                    <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 16l-4-4m0 0l4-4m-4 4h14m-5 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h7a3 3 0 013 3v1"></path>
+                    </svg>
+                    Masuk Sekarang
                 </a>
-                <a href="{{ route('register') }}" class="inline-flex items-center bg-gray-600 text-white px-6 py-3 rounded-xl hover:bg-gray-700 transition-colors duration-200 font-semibold">
-                    Daftar
+                <a href="{{ route('register') }}" class="inline-flex items-center justify-center bg-white text-blue-600 border-2 border-blue-600 px-8 py-4 rounded-xl hover:bg-blue-50 transition-all duration-200 font-semibold">
+                    <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M18 9v3m0 0v3m0-3h3m-3 0h-3m-2-5a4 4 0 11-8 0 4 4 0 018 0zM3 20a6 6 0 0112 0v1H3v-1z"></path>
+                    </svg>
+                    Daftar Akun Baru
                 </a>
+            </div>
+            
+            <!-- Quick Login Info -->
+            <div class="mt-8 p-4 bg-blue-100 rounded-lg max-w-sm mx-auto">
+                <p class="text-sm text-blue-800">
+                    <strong>Info:</strong> Gunakan akun <code>test@example.com</code> untuk testing
+                </p>
             </div>
         </div>
     @else
@@ -88,9 +105,10 @@
                 <div class="md:col-span-2">
                     <div class="flex items-center justify-between mb-2">
                         <label for="location_address" class="block text-sm font-semibold text-gray-700">Alamat Lokasi</label>
-                        <button type="button" wire:click="getCurrentLocation" 
+                        <button type="button" onclick="getMyLocation()"
                                 id="location-btn"
-                                class="text-sm text-blue-600 hover:text-blue-700 font-semibold flex items-center space-x-1 transition-colors duration-200">
+                                class="text-sm text-blue-600 hover:text-blue-700 font-semibold flex items-center space-x-1 transition-colors duration-200"
+                                title="Klik untuk mendapatkan lokasi GPS Anda saat ini">
                             <span>📍</span>
                             <span id="location-btn-text">Gunakan Lokasi Saat Ini</span>
                         </button>
@@ -178,94 +196,97 @@
 </div>
 
 <script>
-document.addEventListener('livewire:init', () => {
-    Livewire.on('get-current-location', () => {
-        if (navigator.geolocation) {
-            // Update button and input state
-            const locationBtn = document.getElementById('location-btn');
-            const locationBtnText = document.getElementById('location-btn-text');
-            const locationInput = document.querySelector('#location_address');
+// Simple geolocation function
+window.getMyLocation = function() {
+    if (!navigator.geolocation) {
+        alert('Geolocation tidak didukung oleh browser ini.');
+        return;
+    }
+
+    const locationBtn = document.getElementById('location-btn');
+    const locationBtnText = document.getElementById('location-btn-text');
+    const locationInput = document.querySelector('#location_address');
+    
+    // Show loading state
+    locationBtnText.textContent = 'Mengambil Lokasi...';
+    locationBtn.disabled = true;
+    locationBtn.classList.add('opacity-50', 'cursor-not-allowed');
+    locationInput.placeholder = 'Mengambil lokasi...';
+    
+    navigator.geolocation.getCurrentPosition(
+        async (position) => {
+            const latitude = position.coords.latitude;
+            const longitude = position.coords.longitude;
             
-            // Show loading state
-            locationBtnText.textContent = 'Mengambil Lokasi...';
-            locationBtn.disabled = true;
-            locationBtn.classList.add('opacity-50', 'cursor-not-allowed');
-            locationInput.placeholder = 'Mengambil lokasi...';
+            console.log('Location found:', latitude, longitude);
             
-            navigator.geolocation.getCurrentPosition(
-                async (position) => {
-                    const latitude = position.coords.latitude;
-                    const longitude = position.coords.longitude;
+            // Set coordinates directly to Livewire
+            @this.set('latitude', latitude);
+            @this.set('longitude', longitude);
+            
+            try {
+                // Simple reverse geocoding
+                const response = await fetch(`https://nominatim.openstreetmap.org/reverse?format=json&lat=${latitude}&lon=${longitude}&zoom=16&addressdetails=1`);
+                
+                if (response.ok) {
+                    const data = await response.json();
+                    console.log('Geocoding result:', data);
                     
-                    // Set coordinates
-                    @this.set('latitude', latitude);
-                    @this.set('longitude', longitude);
-                    
-                    try {
-                        // Use OpenStreetMap Nominatim for reverse geocoding (free)
-                        const response = await fetch(`https://nominatim.openstreetmap.org/reverse?format=json&lat=${latitude}&lon=${longitude}&zoom=16&addressdetails=1`);
-                        
-                        if (response.ok) {
-                            const data = await response.json();
-                            if (data && data.display_name) {
-                                @this.set('location_address', data.display_name);
-                            } else {
-                                @this.set('location_address', `${latitude}, ${longitude}`);
-                            }
-                        } else {
-                            // Fallback to coordinates
-                            @this.set('location_address', `${latitude}, ${longitude}`);
-                        }
-                    } catch (error) {
-                        console.error('Error getting address:', error);
-                        // Fallback to coordinates
+                    if (data && data.display_name) {
+                        @this.set('location_address', data.display_name);
+                    } else {
                         @this.set('location_address', `${latitude}, ${longitude}`);
                     }
-                    
-                    // Reset button and input state
-                    locationBtnText.textContent = 'Lokasi Berhasil Diambil ✓';
-                    locationBtn.classList.remove('opacity-50', 'cursor-not-allowed');
-                    locationBtn.classList.add('text-green-600');
-                    locationInput.placeholder = 'Masukkan alamat lengkap lokasi masalah';
-                    
-                    // Reset button text after 3 seconds
-                    setTimeout(() => {
-                        locationBtnText.textContent = 'Gunakan Lokasi Saat Ini';
-                        locationBtn.classList.remove('text-green-600');
-                        locationBtn.disabled = false;
-                    }, 3000);
-                },
-                (error) => {
-                    // Reset button and input state
-                    locationBtnText.textContent = 'Gunakan Lokasi Saat Ini';
-                    locationBtn.disabled = false;
-                    locationBtn.classList.remove('opacity-50', 'cursor-not-allowed');
-                    locationInput.placeholder = 'Masukkan alamat lengkap lokasi masalah';
-                    
-                    let errorMessage = 'Tidak dapat mengakses lokasi Anda.';
-                    switch(error.code) {
-                        case error.PERMISSION_DENIED:
-                            errorMessage = 'Akses lokasi ditolak. Silakan izinkan akses lokasi di browser Anda.';
-                            break;
-                        case error.POSITION_UNAVAILABLE:
-                            errorMessage = 'Informasi lokasi tidak tersedia.';
-                            break;
-                        case error.TIMEOUT:
-                            errorMessage = 'Permintaan lokasi timeout.';
-                            break;
-                    }
-                    
-                    alert(errorMessage + ' Silakan masukkan alamat secara manual.');
-                },
-                {
-                    enableHighAccuracy: true,
-                    timeout: 10000,
-                    maximumAge: 60000
+                } else {
+                    @this.set('location_address', `${latitude}, ${longitude}`);
                 }
-            );
-        } else {
-            alert('Geolocation tidak didukung oleh browser ini.');
+            } catch (error) {
+                console.error('Error getting address:', error);
+                @this.set('location_address', `${latitude}, ${longitude}`);
+            }
+            
+            // Success state
+            locationBtnText.textContent = 'Lokasi Berhasil ✓';
+            locationBtn.classList.remove('opacity-50', 'cursor-not-allowed');
+            locationBtn.classList.add('text-green-600');
+            locationInput.placeholder = 'Masukkan alamat lengkap lokasi masalah';
+            
+            // Reset after 3 seconds
+            setTimeout(() => {
+                locationBtnText.textContent = 'Gunakan Lokasi Saat Ini';
+                locationBtn.classList.remove('text-green-600');
+                locationBtn.disabled = false;
+            }, 3000);
+        },
+        (error) => {
+            console.error('Geolocation error:', error);
+            
+            // Reset button state
+            locationBtnText.textContent = 'Gunakan Lokasi Saat Ini';
+            locationBtn.disabled = false;
+            locationBtn.classList.remove('opacity-50', 'cursor-not-allowed');
+            locationInput.placeholder = 'Masukkan alamat lengkap lokasi masalah';
+            
+            let errorMessage = 'Tidak dapat mengakses lokasi Anda.';
+            switch(error.code) {
+                case error.PERMISSION_DENIED:
+                    errorMessage = 'Akses lokasi ditolak. Silakan izinkan akses lokasi di browser Anda.';
+                    break;
+                case error.POSITION_UNAVAILABLE:
+                    errorMessage = 'Layanan lokasi tidak tersedia.';
+                    break;
+                case error.TIMEOUT:
+                    errorMessage = 'Permintaan lokasi timeout.';
+                    break;
+            }
+            
+            alert(errorMessage + ' Silakan masukkan alamat secara manual.');
+        },
+        {
+            enableHighAccuracy: true,
+            timeout: 10000,
+            maximumAge: 60000
         }
-    });
-});
+    );
+};
 </script>

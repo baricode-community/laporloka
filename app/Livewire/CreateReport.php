@@ -80,7 +80,7 @@ class CreateReport extends Component
             
             session()->flash('success', "Laporan berhasil dibuat dengan nomor: {$this->reportNumber}");
         } catch (\Exception $e) {
-            session()->flash('error', 'Terjadi kesalahan saat menyimpan laporan. Silakan coba lagi.');
+            session()->flash('error', 'Terjadi kesalahan saat menyimpan laporan: ' . $e->getMessage());
         }
     }
 
