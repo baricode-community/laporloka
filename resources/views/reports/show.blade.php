@@ -169,7 +169,7 @@
                                                 <span
                                                     class="text-xs font-medium text-gray-600 truncate w-full">{{ $attachment->original_filename }}</span>
                                             </div>
-                                    @endif
+                                    @endforeach
 
                                     <a href="#"
                                         class="absolute inset-0 bg-black/0 group-hover:bg-black/10 transition-colors flex items-center justify-center opacity-0 group-hover:opacity-100">
@@ -177,9 +177,8 @@
                                             class="bg-white/90 text-gray-900 text-xs font-bold px-2 py-1 rounded shadow-sm">Lihat</span>
                                     </a>
                                 </div>
-                            @endforeach
+                            @endif
                         </div>
-                        @endif
                     </div>
                 </div>
 
