@@ -4,18 +4,23 @@ use Illuminate\Support\Facades\Route;
 use Laravel\Fortify\Features;
 use Livewire\Volt\Volt;
 use App\Http\Controllers\HomeController;
+use App\Http\Controllers\ReportsController;
 
 // Home routes
 Route::get('/', [HomeController::class, 'index'])->name('home');
 Route::get('/about', [HomeController::class, 'about'])->name('about');
 
 // Reports routes
-Route::get('/laporan', [\App\Http\Controllers\ReportsController::class, 'index'])->name('reports.index');
-Route::get('/laporan/{id}', [\App\Http\Controllers\ReportsController::class, 'show'])->name('reports.show');
+Route::get('/laporan', [ReportsController::class, 'index'])->name('reports.index');
+Route::get('/laporan/create', [ReportsController::class, 'create'])->name('reports.create');
+Route::get('/laporan/{report}/edit', [ReportsController::class, 'edit'])
+    ->name('reports.edit')
+    ->middleware('auth');
+Route::get('/laporan/{id}', [ReportsController::class, 'show'])->name('reports.show');
 
-Route::get('/dashboard', function() {
-        return redirect('/');
-    })
+Route::get('/dashboard', function () {
+    return redirect('/');
+})
     ->middleware(['auth', 'verified'])
     ->name('dashboard');
 

@@ -19,8 +19,14 @@
                 </a>
                 <a href="{{ url('/laporan') }}"
                     class="text-sm font-semibold text-gray-600 hover:text-blue-600 transition-colors {{ request()->is('laporan') ? 'text-blue-600' : '' }}">
-                    Laporan
+                    Data Laporan
                 </a>
+                @auth
+                    <a href="{{ url('/laporan/create') }}"
+                        class="text-sm font-semibold text-gray-600 hover:text-blue-600 transition-colors {{ request()->is('laporan/create') ? 'text-blue-600' : '' }}">
+                        Buat Laporan
+                    </a>
+                @endauth
             </div>
 
             <div class="hidden md:flex items-center space-x-4">

@@ -5,6 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Support\Facades\Storage;
 
 class ReportAttachment extends Model
 {
@@ -49,7 +50,7 @@ class ReportAttachment extends Model
 
     public function isDocument(): bool
     {
-        return str_starts_with($this->mime_type, 'application/') || 
+        return str_starts_with($this->mime_type, 'application/') ||
                str_starts_with($this->mime_type, 'text/');
     }
 
@@ -87,6 +88,6 @@ class ReportAttachment extends Model
 
     public function getUrl(): string
     {
-        return storage_url($this->file_path);
+        return Storage::url($this->file_path);
     }
 }

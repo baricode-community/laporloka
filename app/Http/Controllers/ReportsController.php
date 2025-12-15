@@ -14,23 +14,24 @@ class ReportsController extends Controller
             ->where('is_public', true)
             ->latest('created_at');
 
-        // Apply search filter
         if ($request->get('search')) {
             $query->where(function ($q) use ($request) {
                 $q->where('title', 'like', '%' . $request->get('search') . '%')
-                  ->orWhere('description', 'like', '%' . $request->get('search') . '%')
-                  ->orWhere('location_address', 'like', '%' . $request->get('search') . '%');
+                    ->orWhere('description', 'like', '%' . $request->get('search') . '%')
+                    ->orWhere('location_address', 'like', '%' . $request->get('search') . '%');
             });
         }
 
-        // Apply category filter
         if ($request->get('categoryFilter')) {
             $query->where('category_id', $request->get('categoryFilter'));
         }
 
-        // Apply status filter
         if ($request->get('statusFilter')) {
             $query->where('status', $request->get('statusFilter'));
+        }
+
+        if ($request->has('my_reports') && auth()->check()) {
+            $query->where('user_id', auth()->id());
         }
 
         $reports = $query->paginate(12);
@@ -45,7 +46,14 @@ class ReportsController extends Controller
             'search' => $request->get('search', ''),
             'categoryFilter' => $request->get('categoryFilter', ''),
             'statusFilter' => $request->get('statusFilter', ''),
+            'myReports' => $request->has('my_reports'),
         ]);
+    }
+
+    public function create()
+    {
+
+        return view('reports.create');
     }
 
     public function show($id)
@@ -66,7 +74,7 @@ class ReportsController extends Controller
 
     public function getStatusBadgeColor($status)
     {
-        return match($status) {
+        return match ($status) {
             'pending' => 'bg-yellow-100 text-yellow-800',
             'reviewed' => 'bg-blue-100 text-blue-800',
             'in_progress' => 'bg-orange-100 text-orange-800',
@@ -78,7 +86,7 @@ class ReportsController extends Controller
 
     public function getStatusText($status)
     {
-        return match($status) {
+        return match ($status) {
             'pending' => 'Menunggu',
             'reviewed' => 'Ditinjau',
             'in_progress' => 'Diproses',
@@ -90,7 +98,7 @@ class ReportsController extends Controller
 
     public function getPriorityBadgeColor($priority)
     {
-        return match($priority) {
+        return match ($priority) {
             'low' => 'bg-gray-100 text-gray-800',
             'medium' => 'bg-blue-100 text-blue-800',
             'high' => 'bg-orange-100 text-orange-800',
@@ -101,12 +109,26 @@ class ReportsController extends Controller
 
     public function getPriorityText($priority)
     {
-        return match($priority) {
+        return match ($priority) {
             'low' => 'Rendah',
             'medium' => 'Sedang',
             'high' => 'Tinggi',
             'urgent' => 'Mendesak',
             default => 'Sedang',
         };
+    }
+
+    public function edit(Report $report)
+    {
+        if (auth()->id() !== $report->user_id) {
+            abort(403, 'Anda tidak memiliki izin untuk mengedit laporan ini.');
+        }
+
+        if ($report->status !== 'pending' && $report->status !== 'rejected') {
+            return redirect()->route('reports.show', $report->id)
+                ->with('error', 'Laporan yang sedang diproses atau selesai tidak dapat diedit.');
+        }
+
+        return view('reports.edit', compact('report'));
     }
 }
